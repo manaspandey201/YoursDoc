@@ -17,7 +17,7 @@ class Navbar1 extends Component {
       <div>
         <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: '#BDBDBD', }} >
           <div className="container-fluid">
-            <a className="navbar-brand fw-bold text-dark disabled ">SUWA ARANA </a>
+            <a className="navbar-brand fw-bold text-dark disabled ">YoursDoc </a>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>

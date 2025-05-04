@@ -26,7 +26,7 @@ export default class Footer extends Component {
             </ul>
 
             <p class="text-center">
-              | Copyright @ 2022 |<a href="#" class="footerTxt"></a>
+              | Copyright @ 2025 |<a href="#" class="footerTxt"></a>
             </p>
 
             <ul class="social_footer_ul">

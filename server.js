@@ -1,57 +1,128 @@
+require("dotenv").config(); // Load .env variables first
+
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+// Routes
 const Login1Router = require("./routes/api/Login1");
 const Login2Router = require("./routes/api/Login2");
 const Login3Router = require("./routes/api/Login3");
-const config = require("config");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const dotenv = require("dotenv");
-dotenv.config();
-
+const APPBOOKING = require("./routes/api/AppBooking");
+const PATIENTCHECKIN = require("./routes/api/PatientCheckin");
+const PharmacyRouter = require("./routes/api/Pharmacy");
 
 const app = express();
 
-const APPBOOKING = require("./routes/api/AppBooking");
-const PATIENTCHECKIN = require("./routes/api/PatientCheckin");
-const PharmacyRouter=require("./routes/api/Pharmacy");
-
-// Body parser middleware
+// =======================
+// Middleware Configuration
+// =======================
 app.use(bodyParser.json());
-app.use(cors());
-
-app.use(
-  express.urlencoded({
-    extended: false,
-  })
-);
-//route middleware
-app.use(APPBOOKING);
-app.use(PATIENTCHECKIN);
-app.use(PharmacyRouter);
-
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-// DB Config
-const db = config.get("mongoURI");
-// Connect to MongoDB
-mongoose
-  .connect(db, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("MongoDB successfully connected"))
-  .catch((err) => console.log(err));
 
-// Passport middleware
-//initialize passport
+// CORS Configuration - Adjust according to your needs
+app.use(cors({
+  origin: [
+    "http://localhost:5001",        // Local development
+    "http://183.82.163.13/32",          // Local network (adjust IP range)
+    "https://your-production.com"   // Production domain
+  ],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204
+}));
+
+// ==============
+// Database Setup
+// ==============
+mongoose.set('strictQuery', false); // Suppress Mongoose deprecation warning
+
+const db = process.env.MONGO_URI || "mongodb://localhost:27017/defaultdb";
+
+mongoose.connect(db, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  retryWrites: true,
+  w: "majority"
+})
+.then(() => console.log("MongoDB successfully connected"))
+.catch(err => {
+  console.error("MongoDB connection error:", err);
+  process.exit(1); // Exit if DB connection fails
+});
+
+// Handle MongoDB connection events
+mongoose.connection.on("connected", () => console.log("MongoDB connected"));
+mongoose.connection.on("error", (err) => console.error("MongoDB error:", err));
+mongoose.connection.on("disconnected", () => console.log("MongoDB disconnected"));
+
+// ================
+// Passport Setup
+// ================
 app.use(passport.initialize());
-// Passport config
-require("./config/passport")(passport);
+require("./middleware/passport")(passport);
+
+// ===========
 // Routes
+// ===========
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "running",
+    message: "Server is operational",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// API Routes
 app.use("/api/Login1", Login1Router);
 app.use("/api/Login2", Login2Router);
 app.use("/api/Login3", Login3Router);
+app.use("/api/AppBooking", APPBOOKING);
+app.use("/api/PatientCheckin", PATIENTCHECKIN);
+app.use("/api/Pharmacy", PharmacyRouter);
 
-const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`Server up and running on port ${port} !`));
+// ===========
+// Error Handling
+// ===========
+// 404 Handler
+app.use((req, res, next) => {
+  res.status(404).json({ error: "Endpoint not found" });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error("Server error:", err.stack);
+  res.status(500).json({ error: "Something went wrong!" });
+});
+
+// ===========
+// Server Start
+// ===========
+const port = process.env.PORT || 5001;
+const host = process.env.HOST || "0.0.0.0"; // Listen on all network interfaces
+
+app.listen(port, host, () => {
+  console.log(`=================================`);
+  console.log(`Server running on http://${host}:${port}`);
+  console.log(`Accessible on your network via:`);
+  console.log(`http://${getLocalIpAddress()}:${port}`);
+  console.log(`=================================`);
+});
+
+// Helper function to get local IP
+function getLocalIpAddress() {
+  const interfaces = require('os').networkInterfaces();
+  for (const interfaceName in interfaces) {
+    const iface = interfaces[interfaceName];
+    for (const alias of iface) {
+      if (alias.family === 'IPv4' && !alias.internal) {
+        return alias.address;
+      }
+    }
+  }
+  return 'localhost';
+}

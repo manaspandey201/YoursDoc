@@ -16,8 +16,8 @@ export default class ContactUs extends Component {
           <div class="topic">
             <b>Address</b>
           </div>
-          <div class="text-one">Malabe Road</div>
-          <div class="text-two">Colombo, Sri Lanka</div>
+          <div class="text-one">BBD University</div>
+          <div class="text-two">Lucknow, India</div>
           <br />
           <br />
 
@@ -25,8 +25,8 @@ export default class ContactUs extends Component {
           <div class="topic">
             <b>Phone</b>
           </div>
-          <div class="text-one">077 0000000</div>
-          <div class="text-two">011 1233459</div>
+          <div class="text-one">9100000019</div>
+          <div class="text-two">9155555123</div>
           <br />
           <br />
 
@@ -34,7 +34,7 @@ export default class ContactUs extends Component {
           <div class="topic">
             <b>Email</b>
           </div>
-          <div class="text-one">suwaarana123@gmail.com</div>
+          <div class="text-one">yoursdoc123@gmail.com</div>
         </div>
       </div>
     );
