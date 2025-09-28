@@ -15,143 +15,81 @@ const validate = (req, res, next) => {
 
 // Save appointment
 router.post(
-  "/appbooking/save",
+  "/",
   [
-    //validation
     body("title").notEmpty().trim().isLength({ max: 255 }),
     body("pname").notEmpty().trim().isLength({ max: 255 }),
     body("mobile").notEmpty().trim().isMobilePhone(),
     body("date").isISO8601(),
     body("email").notEmpty().trim().isEmail(),
-    body("nicpass")
-      .notEmpty()
-      .trim()
-      .isLength({ min: 12, max: 12 })
-      .isNumeric(),
+    body("nicpass").notEmpty().trim().isLength({ min: 12, max: 12 }).isNumeric(),
     body("area").notEmpty().trim().isLength({ max: 255 }),
   ],
   validate,
-  (req, res) => {
-    const newPost = new AppBooking(req.body);
-
-    newPost.save((err) => {
-      if (err) {
-        return res.status(500).json({
-          error: "Internal Server Error. Failed to save appointment.",
-        });
-      }
-
-      return res.status(200).json({
-        success: "Appointment booked successfully.",
-      });
-    });
+  async (req, res) => {
+    try {
+      const newPost = new AppBooking(req.body);
+      await newPost.save();
+      res.status(200).json({ success: "Appointment booked successfully." });
+    } catch (err) {
+      res.status(500).json({ error: "Internal Server Error. Failed to save appointment." });
+    }
   }
 );
 
-// Get appointments
-router.get("/appbooking", (req, res) => {
-  AppBooking.find().exec((err, posts) => {
-    if (err) {
-      return res.status(500).json({
-        error: "Internal Server Error. Failed to fetch appointments.",
-      });
-    }
-    return res.status(200).json({
-      success: true,
-      existingPosts: posts,
-    });
-  });
+// Get all appointments
+router.get("/", async (req, res) => {
+  try {
+    const posts = await AppBooking.find();
+    res.status(200).json({ success: true, existingPosts: posts });
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error. Failed to fetch appointments." });
+  }
 });
 
-// Get a specific appointment
-router.get("/appbooking/:id", (req, res) => {
-  const postId = req.params.id;
-
-  AppBooking.findById(postId, (err, post) => {
-    if (err) {
-      return res.status(500).json({
-        error: "Internal Server Error. Failed to fetch appointment.",
-      });
-    }
-
-    if (!post) {
-      return res.status(404).json({
-        error: "Appointment not found.",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      post,
-    });
-  });
+// Get one appointment
+router.get("/:id", async (req, res) => {
+  try {
+    const post = await AppBooking.findById(req.params.id);
+    if (!post) return res.status(404).json({ error: "Appointment not found." });
+    res.status(200).json({ success: true, post });
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error. Failed to fetch appointment." });
+  }
 });
 
 // Update appointment
-router.put(
-  "/appbooking/update/:id",
+router.put("/:id",
   [
-    //validation
     body("title").notEmpty().trim().isLength({ max: 255 }),
     body("pname").notEmpty().trim().isLength({ max: 255 }),
     body("mobile").notEmpty().trim().isMobilePhone(),
     body("date").isISO8601(),
     body("email").notEmpty().trim().isEmail(),
-    body("nicpass")
-      .notEmpty()
-      .trim()
-      .isLength({ min: 12, max: 12 })
-      .isNumeric(),
+    body("nicpass").notEmpty().trim().isLength({ min: 12, max: 12 }).isNumeric(),
     body("area").notEmpty().trim().isLength({ max: 255 }),
   ],
   validate,
-  (req, res) => {
-    AppBooking.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: req.body,
-      },
-      (err, post) => {
-        if (err) {
-          return res.status(500).json({
-            error: "Internal Server Error. Failed to update appointment.",
-          });
-        }
-
-        if (!post) {
-          return res.status(404).json({
-            error: "Appointment not found.",
-          });
-        }
-
-        return res.status(200).json({
-          success: "Appointment updated successfully.",
-        });
-      }
-    );
+  async (req, res) => {
+    try {
+      const post = await AppBooking.findByIdAndUpdate(req.params.id, { $set: req.body });
+      if (!post) return res.status(404).json({ error: "Appointment not found." });
+      res.status(200).json({ success: "Appointment updated successfully." });
+    } catch (err) {
+      res.status(500).json({ error: "Internal Server Error. Failed to update appointment." });
+    }
   }
 );
 
 // Delete appointment
-router.delete("/appbooking/delete/:id", (req, res) => {
-  AppBooking.findByIdAndRemove(req.params.id, (err, deletedpost) => {
-    if (err) {
-      return res.status(500).json({
-        error: "Internal Server Error. Failed to delete appointment.",
-      });
-    }
-
-    if (!deletedpost) {
-      return res.status(404).json({
-        error: "Appointment not found.",
-      });
-    }
-
-    return res.status(200).json({
-      success: "Appointment deleted successfully.",
-      deletedpost,
-    });
-  });
+router.delete("/:id", async (req, res) => {
+  try {
+    const deleted = await AppBooking.findByIdAndRemove(req.params.id);
+    if (!deleted) return res.status(404).json({ error: "Appointment not found." });
+    res.status(200).json({ success: "Appointment deleted successfully.", deleted });
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error. Failed to delete appointment." });
+  }
 });
 
 module.exports = router;

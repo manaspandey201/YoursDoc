@@ -23,12 +23,11 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// CORS Configuration - Adjust according to your needs
+// ✅ Updated CORS Configuration
 app.use(cors({
   origin: [
-    "http://localhost:5001",        // Local development
-    "http://183.82.163.13/32",          // Local network (adjust IP range)
-    "https://your-production.com"   // Production domain
+    "http://localhost:3000",        // Allow your frontend (React)
+    "https://your-production.com"   // Optional: Allow production domain
   ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
@@ -68,7 +67,6 @@ require("./middleware/passport")(passport);
 // ===========
 // Routes
 // ===========
-// Health check endpoint
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "running",
@@ -77,23 +75,20 @@ app.get("/", (req, res) => {
   });
 });
 
-// API Routes
 app.use("/api/Login1", Login1Router);
 app.use("/api/Login2", Login2Router);
 app.use("/api/Login3", Login3Router);
-app.use("/api/AppBooking", APPBOOKING);
+app.use("/api/appbooking", APPBOOKING);
 app.use("/api/PatientCheckin", PATIENTCHECKIN);
 app.use("/api/Pharmacy", PharmacyRouter);
 
 // ===========
 // Error Handling
 // ===========
-// 404 Handler
 app.use((req, res, next) => {
   res.status(404).json({ error: "Endpoint not found" });
 });
 
-// Global error handler
 app.use((err, req, res, next) => {
   console.error("Server error:", err.stack);
   res.status(500).json({ error: "Something went wrong!" });

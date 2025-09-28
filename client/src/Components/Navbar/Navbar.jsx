@@ -17,7 +17,7 @@ class Navbar extends Component {
       <div>
         <nav class="navbar navbar-expand-lg nav">
           <div class="container-fluid">
-            <img className="suwaarana" src="./suwaarana.jpg" />
+            <img className="suwaarana" src="logo.png" />
             <a class="navbar-brand navtext" href="#"></a>
             <button
               class="navbar-toggler"

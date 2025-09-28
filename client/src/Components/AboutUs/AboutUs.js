@@ -34,25 +34,22 @@ export default class AboutUs extends Component {
           <p>
             {" "}
             <a href="#" class="bmstxt">
-              Suwa Arana{" "}
+              YoursDoc{" "}
             </a>{" "}
-            operated by Digital Health Private Limited is Sri Lanka’s pioneering
+            operated by Digital Health Private Limited is India’s pioneering
             digital health solutions service provider, offering medical services
             to subscribers from the convenience of their mobile phone. A
-            subsidiary of Sri Lanka’s premier connectivity providers with its
+            subsidiary of India’s premier connectivity providers with its
             footprint as the digital platform enabler at leading private
-            hospitals groups ; Asiri Hospital Holdings PLC, Nawaloka Hospitals
-            PLC, Ceylon Hospitals PLC (Durdans), Ninewells Hospital & Lanka
-            Hospitals PLC, Digital Health aims to implement and develop a
-            state-of-the-art, integrated, e-commerce infrastructure for Sri
-            Lanka’s healthcare sector.
+            hospitals groups, Digital Health aims to implement and develop a
+            state-of-the-art, integrated, e-commerce infrastructure for India’s healthcare sector.
             <a href="#" class="bmstxt">
               {" "}
-              Suwa Arana{" "}
+              YoursDoc{" "}
             </a>{" "}
-            has connected more than 5000 doctors in over 140 hospitals within
+            aims to connect more than 5000 doctors in over 140 countries within
             five years of its inception, through its digital health platform
-            which is accessible to users via www.suwaarana.lk, by dialing 990 or
+            which is accessible to users via www.yoursdoc.com, by dialing 990 or
             via the Suwa Arana app, available both on Android and iOS. Suwa
             Arana currently offers a range of medical services including doctor
             channelling sessions at hospitals island wide for physical
@@ -66,9 +63,8 @@ export default class AboutUs extends Component {
           <br />
 
           <p>
-            The service is open and available to all 22 million plus Sri
-            Lankans, and we at Digital Health aim to transform the health care
-            service sector and experience for all Sri Lankans and serve as the
+            The service is open and available to all 1.4 billion plus Indian’s and we at Digital Health aim to transform the health care
+            service sector and experience for all India’s and serve as the
             benchmark for integrated e-commerce healthcare solutions in the
             Asia-Pacific region.
           </p>

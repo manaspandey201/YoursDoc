@@ -5,7 +5,6 @@ import "./Allcss.css";
 export default class AppBookingDetails extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       post: {},
     };
@@ -14,65 +13,49 @@ export default class AppBookingDetails extends Component {
   componentDidMount() {
     const id = this.props.match.params.id;
 
-    axios.get(`/appbooking/${id}`).then((res) => {
-      if (res.data.success) {
-        this.setState({
-          post: res.data.post,
-        });
-
-        console.log(this.state.post);
-      }
-    });
+    axios.get(`/api/appbooking/${id}`)
+      .then((res) => {
+        if (res.data.success) {
+          this.setState({ post: res.data.post });
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching appointment details:", err);
+      });
   }
 
   render() {
-    const { title, pname, mobile, date, email, nicpass, area } =
-      this.state.post;
+    const { title, pname, mobile, date, email, nicpass, area } = this.state.post;
+
     return (
-      <div>
-        <nav class="navbar b">
-          <div class="container">
-            <form class="d-flex nav1 " role="search">
+      <div className="container mt-4">
+        <nav className="navbar b mb-4">
+          <div className="container">
+            <form className="d-flex nav1" role="search">
               <input
-                class="form-control me-2"
+                className="form-control me-2"
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
-                onChange={this.handleSearchArea}
-              ></input>
+              />
               &nbsp;
-              <button class="btn btn-outline-warning " type="submit">
+              <button className="btn btn-outline-warning" type="submit">
                 Search
               </button>
             </form>
-            <a class="navbar-brand" href="#"></a>
           </div>
         </nav>
 
-        <h3 className="title">
-          <span className="badge bg-light text-dark">{title}</span>
-        </h3>
-        <h3 className="description">
-          <span className="badge bg-light text-dark">{pname}</span>
-        </h3>
-        <h3 className="title">
-          <span className="badge bg-light text-dark">{mobile}</span>
-        </h3>
-        <h3 className="title">
-          <span className="badge bg-light text-dark">{date}</span>
-        </h3>
-        <h3 className="title">
-          <span className="badge bg-light text-dark">{email}</span>
-        </h3>
-        <h3 className="title">
-          <span className="badge bg-light text-dark">{nicpass}</span>
-        </h3>
-        <h3 className="title">
-          <span className="badge bg-light text-dark">{area}</span>
-        </h3>
-
-        <br />
-        <br />
+        <div className="card p-4 shadow-sm rounded bg-light">
+          <h4 className="mb-3">Appointment Details</h4>
+          <p><strong>Title:</strong> {title}</p>
+          <p><strong>Patient Name:</strong> {pname}</p>
+          <p><strong>Mobile:</strong> {mobile}</p>
+          <p><strong>Date:</strong> {date}</p>
+          <p><strong>Email:</strong> {email}</p>
+          <p><strong>NIC/Passport:</strong> {nicpass}</p>
+          <p><strong>Area:</strong> {area}</p>
+        </div>
       </div>
     );
   }

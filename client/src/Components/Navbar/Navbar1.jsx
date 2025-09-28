@@ -25,11 +25,11 @@ class Navbar1 extends Component {
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
                 <a class="fs-4 nav-link text-primary " aria-current="page" >HOSPITAL</a>
-                <a class="fs-4 nav-link " href="">011-1233459</a>
+                <a class="fs-4 nav-link " href="">0522-1233459</a>
 
                 <a class="fs-4 nav-link text-primary" aria-current="page"> | </a>
 
-                <a class="fs-4 nav-link text-primary" aria-current="page" >SUWA SARIYA</a>
+                <a class="fs-4 nav-link text-primary" aria-current="page" >Ambulance</a>
                 <a class="fs-4 nav-link" href="">1999</a>
               </div>
             </div>
